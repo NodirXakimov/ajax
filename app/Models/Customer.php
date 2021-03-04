@@ -9,5 +9,5 @@ class Customer extends Model
 {
     use HasFactory;
     protected $fillable = [];
-    protected $table = 'ajax';
+    protected $table = 'Customers';
 }

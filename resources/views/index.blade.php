@@ -1,149 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Learning AJAX</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+@extends('layouts.app')
 
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-    <!-- Popper JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <style>
-        body {
-            color: #566787;
-            background: #f5f5f5;
-            font-family: 'Roboto', sans-serif;
-        }
-        .table-responsive {
-            margin: 30px 0;
-        }
-        .table-wrapper {
-            min-width: 1000px;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 1px 1px rgba(0,0,0,.05);
-        }
-        .table-title {
-            padding-bottom: 10px;
-            margin: 0 0 10px;
-            min-width: 100%;
-        }
-        .table-title h2 {
-            margin: 8px 0 0;
-            font-size: 22px;
-        }
-        .search-box {
-            position: relative;
-            float: right;
-        }
-        .search-box input {
-            height: 34px;
-            border-radius: 20px;
-            padding-left: 35px;
-            border-color: #ddd;
-            box-shadow: none;
-        }
-        .search-box input:focus {
-            border-color: #3FBAE4;
-        }
-        .search-box i {
-            color: #a0a5b1;
-            position: absolute;
-            font-size: 19px;
-            top: 8px;
-            left: 10px;
-        }
-        table.table tr th, table.table tr td {
-            border-color: #e9e9e9;
-        }
-        table.table-striped tbody tr:nth-of-type(odd) {
-            background-color: #fcfcfc;
-        }
-        table.table-striped.table-hover tbody tr:hover {
-            background: #f5f5f5;
-        }
-        table.table th i {
-            font-size: 13px;
-            margin: 0 5px;
-            cursor: pointer;
-        }
-        table.table td:last-child {
-            width: 130px;
-        }
-        table.table td a {
-            color: #a0a5b1;
-            display: inline-block;
-            margin: 0 5px;
-        }
-        table.table td a.view {
-            color: #03A9F4;
-        }
-        table.table td a.edit {
-            color: #FFC107;
-        }
-        table.table td a.delete {
-            color: #E34724;
-        }
-        table.table td i {
-            font-size: 19px;
-        }
-        .pagination {
-            float: right;
-            margin: 0 0 5px;
-        }
-        .pagination li a {
-            border: none;
-            font-size: 95%;
-            width: 30px;
-            height: 30px;
-            color: #999;
-            margin: 0 2px;
-            line-height: 30px;
-            border-radius: 30px !important;
-            text-align: center;
-            padding: 0;
-        }
-        .pagination li a:hover {
-            color: #666;
-        }
-        .pagination li.active a {
-            background: #03A9F4;
-        }
-        .pagination li.active a:hover {
-            background: #0397d6;
-        }
-        .pagination li.disabled i {
-            color: #ccc;
-        }
-        .pagination li i {
-            font-size: 16px;
-            padding-top: 6px
-        }
-        .hint-text {
-            float: left;
-            margin-top: 6px;
-            font-size: 95%;
-        }
-    </style>
-    <script>
-        $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
-</head>
-<body>
-<div class="container-xl">
+@section('content')
     <div class="table-responsive">
         <div class="table-wrapper">
             <div class="table-title">
@@ -169,72 +26,8 @@
                     <th>Actions</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Thomas Hardy</td>
-                    <td>89 Chiaroscuro Rd.</td>
-                    <td>Portland</td>
-                    <td>97219</td>
-                    <td>USA</td>
-                    <td>
-                        <a href="#" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
-                        <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                        <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Maria Anders</td>
-                    <td>Obere Str. 57</td>
-                    <td>Berlin</td>
-                    <td>12209</td>
-                    <td>Germany</td>
-                    <td>
-                        <a href="#" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
-                        <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                        <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Fran Wilson</td>
-                    <td>C/ Araquil, 67</td>
-                    <td>Madrid</td>
-                    <td>28023</td>
-                    <td>Spain</td>
-                    <td>
-                        <a href="#" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
-                        <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                        <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>Dominique Perrier</td>
-                    <td>25, rue Lauriston</td>
-                    <td>Paris</td>
-                    <td>75016</td>
-                    <td>France</td>
-                    <td>
-                        <a href="#" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
-                        <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                        <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>Martin Blank</td>
-                    <td>Via Monte Bianco 34</td>
-                    <td>Turin</td>
-                    <td>10100</td>
-                    <td>Italy</td>
-                    <td>
-                        <a href="#" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
-                        <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                        <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                    </td>
-                </tr>
+                <tbody id="showAllCustomersTable">
+
                 </tbody>
             </table>
             <div class="clearfix">
@@ -251,6 +44,64 @@
             </div>
         </div>
     </div>
-</div>
-</body>
-</html>
+@endsection
+
+@section('modal')
+
+    <!-- Show a customer modal -->
+    <div class="modal fade" id="showCustomer" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-borderless">
+                        <tbody id="ShowACustomer">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('jquery_scripts')
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+            fetch_all_customers();
+            $('#showCustomer').on('show.bs.modal', function () {
+
+                $.ajax({
+                    url: "{{ route('customers.show', 12) }}",
+                    method: 'GET',
+                    success: function (result) {
+                        console.log(result);
+                    }
+                });
+            })
+        });
+        function fetch_all_customers() {
+            $.ajax({
+                url: "{{ route('customers.index') }}",
+                method: 'GET',
+                success: function (result){
+                    var td = '<td><a href="#showCustomer" class="view" title="View" data-toggle="modal" data-target="#showCustomer"><i class="material-icons">&#xE417;</i></a><a href="#editCustomer" class="edit" title="Edit" data-toggle="modal" data-target="#editCustomer"><i class="material-icons">&#xE254;</i></a><a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>';
+                    for (var key in result)
+                    {
+                        var tr = "<tr><input style='display: none' value='${result[key].id}'><td>" + result[key].id + "</td><td>" + result[key].name + "</td><td>" + result[key].address + "</td><td>" + result[key].city + "</td><td>" + result[key].pin_code + "</td><td>" + result[key].country + "</td>" + td + "</tr>";
+                        $('#showAllCustomersTable').append(tr);
+                    }
+                }
+            });
+        }
+    </script>
+@endsection
