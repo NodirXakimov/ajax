@@ -94,10 +94,10 @@
                 url: "{{ route('customers.index') }}",
                 method: 'GET',
                 success: function (result){
-                    var td = '<td><a href="#showCustomer" class="view" title="View" data-toggle="modal" data-target="#showCustomer"><i class="material-icons">&#xE417;</i></a><a href="#editCustomer" class="edit" title="Edit" data-toggle="modal" data-target="#editCustomer"><i class="material-icons">&#xE254;</i></a><a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>';
-                    for (var key in result)
+                    let td = '<td><a href="#showCustomer" class="view" title="View" data-toggle="modal" data-target="#showCustomer"><i class="material-icons">&#xE417;</i></a><a href="#editCustomer" class="edit" title="Edit" data-toggle="modal" data-target="#editCustomer"><i class="material-icons">&#xE254;</i></a><a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>';
+                    for (let key in result)
                     {
-                        var tr = "<tr><input style='display: none' value='${result[key].id}'><td>" + result[key].id + "</td><td>" + result[key].name + "</td><td>" + result[key].address + "</td><td>" + result[key].city + "</td><td>" + result[key].pin_code + "</td><td>" + result[key].country + "</td>" + td + "</tr>";
+                        let tr = "<tr><input style='display: none' value='${result[key].id}'><td>" + result[key].id + "</td><td>" + result[key].name + "</td><td>" + result[key].address + "</td><td>" + result[key].city + "</td><td>" + result[key].pin_code + "</td><td>" + result[key].country + "</td>" + td + "</tr>";
                         $('#showAllCustomersTable').append(tr);
                     }
                 }
