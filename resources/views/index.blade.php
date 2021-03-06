@@ -53,14 +53,14 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <h5 class="modal-title" id="showCustomerTitle">Modal title</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <table class="table table-borderless">
-                        <tbody id="ShowACustomer">
+                    <table class="table table-hover">
+                        <tbody id="ShowCustomerTableBody">
 
                         </tbody>
                     </table>
@@ -76,30 +76,46 @@
 @section('jquery_scripts')
     <script>
         $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();
-            fetch_all_customers();
-            $('#showCustomer').on('show.bs.modal', function () {
-
-                $.ajax({
-                    url: "{{ route('customers.show', 12) }}",
-                    method: 'GET',
-                    success: function (result) {
-                        console.log(result);
-                    }
-                });
-            })
+            fetchAllCustomers();
+            $('#showCustomer').on('hidden.bs.modal', function (){
+                $('#ShowCustomerTableBody').empty();
+            });
         });
-        function fetch_all_customers() {
+        function fetchAllCustomers() {
             $.ajax({
                 url: "{{ route('customers.index') }}",
                 method: 'GET',
                 success: function (result){
-                    let td = '<td><a href="#showCustomer" class="view" title="View" data-toggle="modal" data-target="#showCustomer"><i class="material-icons">&#xE417;</i></a><a href="#editCustomer" class="edit" title="Edit" data-toggle="modal" data-target="#editCustomer"><i class="material-icons">&#xE254;</i></a><a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>';
                     for (let key in result)
                     {
-                        let tr = "<tr><input style='display: none' value='${result[key].id}'><td>" + result[key].id + "</td><td>" + result[key].name + "</td><td>" + result[key].address + "</td><td>" + result[key].city + "</td><td>" + result[key].pin_code + "</td><td>" + result[key].country + "</td>" + td + "</tr>";
+                        let tr = "<tr><input style='display: none' value='${result[key].id}'><td>" + result[key].id + "</td><td>" + result[key].name + "</td><td>" + result[key].address + "</td><td>" + result[key].city + "</td><td>" + result[key].pin_code + "</td><td>" + result[key].country + "</td>" + buttons(result[key].id) + "</tr>";
                         $('#showAllCustomersTable').append(tr);
                     }
+                }
+            });
+        }
+        function buttons(id) {
+            return '<td><a href="#showCustomer" class="view" title="View" data-toggle="modal" data-target="#showCustomer" onclick="fetchCustomer('+id+')"><i class="material-icons">&#xE417;</i></a><a href="#editCustomer" class="edit" title="Edit" data-toggle="modal" data-target="#editCustomer"><i class="material-icons">&#xE254;</i></a><a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>';
+        }
+        function fetchCustomer(id) {
+            let url = "{{ route('customers.show', ":id") }}";
+            url = url.replace(':id', id);
+
+            $.ajax({
+                url: url,
+                method: 'GET',
+                dataType: 'json',
+                success: function (result) {
+                    let tr = "<tr><td>ID</td><td>" + result.id + "</td></tr>";
+                    tr += "<tr><td>Name</td><td>" + result.name + "</td></tr>"
+                    tr += "<tr><td>Adress</td><td>" + result.address + "</td></tr>"
+                    tr += "<tr><td>Pin code</td><td>" + result.pin_code + "</td></tr>"
+                    tr += "<tr><td>City</td><td>" + result.city + "</td></tr>"
+                    tr += "<tr><td>Country</td><td>" + result.country + "</td></tr>"
+                    tr += "<tr><td>Created</td><td>" + result.created_at + "</td></tr>"
+                    tr += "<tr><td>Updated</td><td>" + result.updated_at + "</td></tr>"
+                    $('#showCustomerTitle').html('Customer: <b>' + result.name + '</b>');
+                    $('#ShowCustomerTableBody').append(tr);
                 }
             });
         }
