@@ -71,6 +71,48 @@
             </div>
         </div>
     </div>
+
+    <!-- Edit a customer modal -->
+    <div class="modal fade" id="editCustomer" tabindex="-1" role="dialog" aria-labelledby="centerTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="centerTitle">Edit customer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Customer name</label>
+                            <input type="text" class="form-control" id="name" aria-describedby="emailHelp" placeholder="Enter name" >
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Address</label>
+                            <input type="text" class="form-control" id="address" aria-describedby="" placeholder="Enter address">
+                        </div>
+                        <div class="form-group">
+                            <label for="name">City</label>
+                            <input type="text" class="form-control" id="city" aria-describedby="" placeholder="Enter city">
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Pin code</label>
+                            <input type="number" class="form-control" id="pin_code" aria-describedby="" placeholder="Enter pin code">
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Country</label>
+                            <input type="text" class="form-control" id="country" aria-describedby="" placeholder="Enter country">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="updateUserSubmit">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('jquery_scripts')
@@ -82,20 +124,21 @@
             });
         });
         function fetchAllCustomers() {
+            $('#showAllCustomersTable').empty();
             $.ajax({
                 url: "{{ route('customers.index') }}",
                 method: 'GET',
                 success: function (result){
                     for (let key in result)
                     {
-                        let tr = "<tr><input style='display: none' value='${result[key].id}'><td>" + result[key].id + "</td><td>" + result[key].name + "</td><td>" + result[key].address + "</td><td>" + result[key].city + "</td><td>" + result[key].pin_code + "</td><td>" + result[key].country + "</td>" + buttons(result[key].id) + "</tr>";
+                        let tr = "<tr><td>" + result[key].id + "</td><td>" + result[key].name + "</td><td>" + result[key].address + "</td><td>" + result[key].city + "</td><td>" + result[key].pin_code + "</td><td>" + result[key].country + "</td>" + buttons(result[key].id) + "</tr>";
                         $('#showAllCustomersTable').append(tr);
                     }
                 }
             });
         }
         function buttons(id) {
-            return '<td><a href="#showCustomer" class="view" title="View" data-toggle="modal" data-target="#showCustomer" onclick="fetchCustomer('+id+')"><i class="material-icons">&#xE417;</i></a><a href="#editCustomer" class="edit" title="Edit" data-toggle="modal" data-target="#editCustomer"><i class="material-icons">&#xE254;</i></a><a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>';
+            return '<td><a href="#showCustomer" class="view" title="View" data-toggle="modal" data-target="#showCustomer" onclick="fetchCustomer('+id+')"><i class="material-icons">&#xE417;</i></a><a href="#editCustomer" onclick="fetchCustomerForEdit('+id+')" class="edit" title="Edit" data-toggle="modal" data-target="#editCustomer"><i class="material-icons">&#xE254;</i></a><a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>';
         }
         function fetchCustomer(id) {
             let url = "{{ route('customers.show', ":id") }}";
@@ -116,6 +159,50 @@
                     tr += "<tr><td>Updated</td><td>" + result.updated_at + "</td></tr>"
                     $('#showCustomerTitle').html('Customer: <b>' + result.name + '</b>');
                     $('#ShowCustomerTableBody').append(tr);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+        function fetchCustomerForEdit(id) {
+            let url = "{{ route('customers.show', ":id") }}";
+            url = url.replace(':id', id);
+            $.ajax({
+                url: url,
+                method: 'GET',
+                dataType: 'json',
+                success: function (result) {
+                    $('#name').val(result.name);
+                    $('#address').val(result.address);
+                    $('#city').val(result.city);
+                    $('#pin_code').val(result.pin_code);
+                    $('#country').val(result.country);
+                    $("#updateUserSubmit").attr("onclick", "updateCustomer("+ result.id +")");
+                }
+            });
+        }
+        function updateCustomer(id) {
+            let formData = {
+            name     : $('#name').val(),
+            address  : $('#address').val(),
+            city     : $('#city').val(),
+            pin_code : $('#pin_code').val(),
+            country  : $('#country').val(),
+            }
+            let url = "{{ route('customers.update', ":id") }}";
+            url = url.replace(':id', id);
+            $.ajax({
+                url: url,
+                method: 'PUT',
+                data: formData,
+                dataType: 'json',
+                success: function (result){
+                    $('#editCustomer').modal('toggle');
+                    fetchAllCustomers();
+                },
+                error: function (error){
+                    console.log(error);
                 }
             });
         }
