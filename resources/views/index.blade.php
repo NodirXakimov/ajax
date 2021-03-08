@@ -113,6 +113,28 @@
             </div>
         </div>
     </div>
+
+    <!-- Delete a customer modal -->
+    <div class="modal fade" id="deleteCustomer" tabindex="-1" role="dialog" aria-labelledby="centerTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteCustomer">Delete customer?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="nameToModal"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger" id="deleteUserSubmit">Delete customer?</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @section('jquery_scripts')
@@ -131,14 +153,14 @@
                 success: function (result){
                     for (let key in result)
                     {
-                        let tr = "<tr><td>" + result[key].id + "</td><td>" + result[key].name + "</td><td>" + result[key].address + "</td><td>" + result[key].city + "</td><td>" + result[key].pin_code + "</td><td>" + result[key].country + "</td>" + buttons(result[key].id) + "</tr>";
+                        let tr = "<tr data-id='"+result[key].id+"'><td>" + result[key].id + "</td><td>" + result[key].name + "</td><td>" + result[key].address + "</td><td>" + result[key].city + "</td><td>" + result[key].pin_code + "</td><td>" + result[key].country + "</td>" + buttons(result[key].id, result[key].name) + "</tr>";
                         $('#showAllCustomersTable').append(tr);
                     }
                 }
             });
         }
-        function buttons(id) {
-            return '<td><a href="#showCustomer" class="view" title="View" data-toggle="modal" data-target="#showCustomer" onclick="fetchCustomer('+id+')"><i class="material-icons">&#xE417;</i></a><a href="#editCustomer" onclick="fetchCustomerForEdit('+id+')" class="edit" title="Edit" data-toggle="modal" data-target="#editCustomer"><i class="material-icons">&#xE254;</i></a><a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>';
+        function buttons(id, name) {
+            return '<td><a href="#showCustomer" class="view" title="View" data-toggle="modal" data-target="#showCustomer" onclick="fetchCustomer('+id+')"><i class="material-icons">&#xE417;</i></a><a href="#editCustomer" onclick="fetchCustomerForEdit('+id+')" class="edit" title="Edit" data-toggle="modal" data-target="#editCustomer"><i class="material-icons">&#xE254;</i></a><a href="#deleteCustomer" onclick="nameToModal('+id+')" class="delete" title="Delete" data-toggle="modal"><i class="material-icons">&#xE872;</i></a></td>';
         }
         function fetchCustomer(id) {
             let url = "{{ route('customers.show', ":id") }}";
@@ -200,6 +222,31 @@
                 success: function (result){
                     $('#editCustomer').modal('toggle');
                     fetchAllCustomers();
+                },
+                error: function (error){
+                    console.log(error);
+                }
+            });
+        }
+        function nameToModal(id){
+            $('#nameToModal').html('This customer will be deleted. Are you sure?');
+            let deleteButton = "deleteCustomer("+id+")";
+            $('#deleteUserSubmit').attr('onclick', deleteButton);
+        }
+        function deleteCustomer(id) {
+            let url = "{{ route('customers.destroy', ":id") }}";
+            url = url.replace(':id', id);
+            $.ajax({
+                url: url,
+                method: 'DELETE',
+                // data: formData,
+                dataType: 'json',
+                success: function (result){
+                    $('#deleteCustomer').modal('toggle');
+                    console.log(result);
+                    let tr = "tr[data-id="+result+"]";
+                    $(tr).remove();
+                    // fetchAllCustomers();
                 },
                 error: function (error){
                     console.log(error);
