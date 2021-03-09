@@ -16,6 +16,9 @@ use App\Http\Controllers\HomeController;
 Route::get('/', function () {
     return view('index');
 });
+Route::get('/home', function (){
+    return view('welcome');
+});
 
 Route::get('/ajax-form', 'HomeController@ajax_form');
 Route::post('/ajax', 'HomeController@ajax');

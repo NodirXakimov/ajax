@@ -9,7 +9,7 @@
                     <div class="col-sm-4">
                         <div class="search-box">
                             <i class="material-icons">&#xE8B6;</i>
-                            <input type="text" class="form-control" placeholder="Search&hellip;">
+                            <input id="search" type="text" class="form-control" placeholder="Search&hellip;">
                         </div>
                     </div>
                 </div>
@@ -230,6 +230,11 @@
                 });
 
             });
+            $('#search').keyup(function() {
+                let result = $('#search').val();
+                console.log(result);
+            });
+
         });
         function fetchAllCustomers() {
             $('#showAllCustomersTable').empty();
