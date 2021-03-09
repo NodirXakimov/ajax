@@ -27,7 +27,7 @@ class CustomerRequest extends FormRequest
             'name'      => 'required',
             'address'   => 'required',
             'city'      => 'required',
-            'pin_code'  => 'required|unique',
+            'pin_code'  => 'required|min:5',
             'country'   => 'required',
         ];
     }

@@ -23,7 +23,7 @@
                     <th>City <i class="fa fa-sort"></i></th>
                     <th>Pin Code</th>
                     <th>Country <i class="fa fa-sort"></i></th>
-                    <th>Actions</th>
+                    <th style="text-align: center; "><a href="#createCustomer" data-toggle="modal" data-target="#createCustomer"><i style="font-size: 25px; color: green" class="fa fa-plus-square"></i></a></th>
                 </tr>
                 </thead>
                 <tbody id="showAllCustomersTable">
@@ -47,6 +47,53 @@
 @endsection
 
 @section('modal')
+
+    <!-- Create a customer modal -->
+    <div class="modal fade" id="createCustomer" tabindex="-1" role="dialog" aria-labelledby="centerTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="centerTitle">Create a new customer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <form id="createCustomerForm" method="post" action="#">
+                            <div class="alert alert-danger" id="createDanger" style="display: none">
+                                <ul></ul>
+                            </div>
+                            <div class="form-group">
+                                <label for="createName">Customer name</label>
+                                <input type="text" class="form-control" id="createName">
+                            </div>
+                            <div class="form-group">
+                                <label for="createAddress">Address</label>
+                                <input type="text" class="form-control" id="createAddress">
+                            </div>
+                            <div class="form-group">
+                                <label for="createCity">City</label>
+                                <input type="text" class="form-control" id="createCity">
+                            </div>
+                            <div class="form-group">
+                                <label for="createPin_code">Pin code</label>
+                                <input type="number" class="form-control" id="createPin_code">
+                            </div>
+                            <div class="form-group">
+                                <label for="createCountry">Country</label>
+                                <input type="text" class="form-control" id="createCountry">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="createCustomerSubmit" form="createCustomerForm">Create customer</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Show a customer modal -->
     <div class="modal fade" id="showCustomer" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -83,28 +130,33 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="name">Customer name</label>
-                            <input type="text" class="form-control" id="name" aria-describedby="emailHelp" placeholder="Enter name" >
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Address</label>
-                            <input type="text" class="form-control" id="address" aria-describedby="" placeholder="Enter address">
-                        </div>
-                        <div class="form-group">
-                            <label for="name">City</label>
-                            <input type="text" class="form-control" id="city" aria-describedby="" placeholder="Enter city">
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Pin code</label>
-                            <input type="number" class="form-control" id="pin_code" aria-describedby="" placeholder="Enter pin code">
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Country</label>
-                            <input type="text" class="form-control" id="country" aria-describedby="" placeholder="Enter country">
-                        </div>
-                    </form>
+                  <div class="container">
+                      <form>
+                          <div class="alert alert-danger" id="editDanger" style="display: none">
+                              <ul></ul>
+                          </div>
+                          <div class="form-group">
+                              <label for="name">Customer name</label>
+                              <input type="text" class="form-control" id="name" aria-describedby="emailHelp" >
+                          </div>
+                          <div class="form-group">
+                              <label for="address">Address</label>
+                              <input type="text" class="form-control" id="address" aria-describedby="" >
+                          </div>
+                          <div class="form-group">
+                              <label for="city">City</label>
+                              <input type="text" class="form-control" id="city" aria-describedby="" >
+                          </div>
+                          <div class="form-group">
+                              <label for="pin_code">Pin code</label>
+                              <input type="number" class="form-control" id="pin_code" aria-describedby="" >
+                          </div>
+                          <div class="form-group">
+                              <label for="country">Country</label>
+                              <input type="text" class="form-control" id="country" aria-describedby="" >
+                          </div>
+                      </form>
+                  </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -144,6 +196,40 @@
             $('#showCustomer').on('hidden.bs.modal', function (){
                 $('#ShowCustomerTableBody').empty();
             });
+            $('#createCustomer').on('hidden.bs.modal', function () {
+                $('#createCustomerForm input[type="text"], input[type="number"]').val('');
+            });
+            $('#createCustomerSubmit').click(function (e) {
+                e.preventDefault();
+                let data = {
+                    name        : $('#createName').val(),
+                     address    : $('#createAddress').val(),
+                     city       : $('#createCity').val(),
+                     pin_code   : $('#createPin_code').val(),
+                     country    : $('#createCountry').val(),
+                };
+                $.ajax({
+                    method: 'POST',
+                    url: "{{ route('customers.store') }}",
+                    data: data,
+                    success: function (result) {
+                        tr = newRow(result.id, result.name, result.address, result.city, result.pin_code, result.country);
+                        $('#showAllCustomersTable').append(tr);
+                        $('#createCustomer').modal('toggle');
+                    },
+                    error: function (response, status, error) {
+                        let json = $.parseJSON(response.responseText);
+                        console.log(json['errors'])
+                        $('#createDanger').show().delay(2500).fadeOut(function() {
+                            $(this).children('ul').empty();
+                        });
+                        $.each(json.errors, function (index, value) {
+                            $('#createDanger').children('ul').append('<li>'+value+'</li>');
+                        })
+                    }
+                });
+
+            });
         });
         function fetchAllCustomers() {
             $('#showAllCustomersTable').empty();
@@ -153,14 +239,17 @@
                 success: function (result){
                     for (let key in result)
                     {
-                        let tr = "<tr data-id='"+result[key].id+"'><td>" + result[key].id + "</td><td>" + result[key].name + "</td><td>" + result[key].address + "</td><td>" + result[key].city + "</td><td>" + result[key].pin_code + "</td><td>" + result[key].country + "</td>" + buttons(result[key].id, result[key].name) + "</tr>";
+                        let tr = "<tr data-id='"+result[key].id+"'><td>" + result[key].id + "</td><td>" + result[key].name + "</td><td>" + result[key].address + "</td><td>" + result[key].city + "</td><td>" + result[key].pin_code + "</td><td>" + result[key].country + "</td>" + buttons(result[key].id) + "</tr>";
                         $('#showAllCustomersTable').append(tr);
                     }
                 }
             });
         }
-        function buttons(id, name) {
+        function buttons(id) {
             return '<td><a href="#showCustomer" class="view" title="View" data-toggle="modal" data-target="#showCustomer" onclick="fetchCustomer('+id+')"><i class="material-icons">&#xE417;</i></a><a href="#editCustomer" onclick="fetchCustomerForEdit('+id+')" class="edit" title="Edit" data-toggle="modal" data-target="#editCustomer"><i class="material-icons">&#xE254;</i></a><a href="#deleteCustomer" onclick="nameToModal('+id+')" class="delete" title="Delete" data-toggle="modal"><i class="material-icons">&#xE872;</i></a></td>';
+        }
+        function newRow(id, name, address, city, pin_code, country){
+            return "<tr data-id='"+id+"'><td>"+id+"</td><td>"+name+"</td><td>"+address+"</td><td>"+city+"</td><td>"+pin_code+"</td><td>"+country+"</td>"+buttons(id)+"</tr>";
         }
         function fetchCustomer(id) {
             let url = "{{ route('customers.show', ":id") }}";
@@ -221,10 +310,25 @@
                 dataType: 'json',
                 success: function (result){
                     $('#editCustomer').modal('toggle');
-                    fetchAllCustomers();
+                    // fetchAllCustomers();
+                    // console.log(result.id);
+                    let tr = "tr[data-id="+result.id+"]";
+                    $(tr).after(newRow(result.id, result.name, result.address, result.city, result.pin_code, result.country));
+                    $(tr).first().remove();
+
                 },
-                error: function (error){
-                    console.log(error);
+                error: function (response, status, error){
+                    let json = $.parseJSON(response.responseText);
+                    console.log(json['errors'])
+                    $('#editDanger').show().delay(3000).fadeOut(function() {
+                        $(this).children('ul').empty();
+                    });
+                    $.each(json.errors, function (index, value) {
+                        console.log(index);
+                        // let field = '#' + index;
+                        // $(field).attr('style', 'border-color:red');
+                        $('#editDanger').children('ul').append('<li>'+value+'</li>');
+                    })
                 }
             });
         }
@@ -243,7 +347,7 @@
                 dataType: 'json',
                 success: function (result){
                     $('#deleteCustomer').modal('toggle');
-                    console.log(result);
+                    // console.log(result);
                     let tr = "tr[data-id="+result+"]";
                     $(tr).remove();
                     // fetchAllCustomers();

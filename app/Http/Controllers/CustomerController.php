@@ -24,16 +24,16 @@ class CustomerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CustomerRequest $request)
     {
-        //
+        return Customer::create($request->all());
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
+     * @return Customer
      */
     public function show(Customer $customer)
     {
@@ -45,9 +45,9 @@ class CustomerController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
+     * @return Customer
      */
-    public function update(Request $request, Customer $customer)
+    public function update(CustomerRequest $request, Customer $customer)
     {
         $customer->update($request->all());
         return $customer;
@@ -57,7 +57,7 @@ class CustomerController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
+     * @return int
      */
     public function destroy(Customer $customer)
     {
