@@ -231,8 +231,25 @@
 
             });
             $('#search').keyup(function() {
-                let result = $('#search').val();
-                console.log(result);
+                let queryText = $(this).val();
+                $.ajax({
+                    url:"{{ route('customers.search') }}",
+                    type:"GET",
+                    data:{'queryText': queryText},
+                    success: function(data) {
+                        let tr = '';
+                        for (let key in data)
+                        {
+                            tr += "<tr data-id='"+data[key].id+"'><td>" + data[key].id + "</td><td>" + data[key].name + "</td><td>" + data[key].address + "</td><td>" + data[key].city + "</td><td>" + data[key].pin_code + "</td><td>" + data[key].country + "</td>" + buttons(data[key].id) + "</tr>";
+                        }
+                        if(!tr)
+                            tr = "Did not match"
+                        $('#showAllCustomersTable').html(tr);
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                })
             });
 
         });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller
 {
@@ -69,6 +70,23 @@ class CustomerController extends Controller
         else
         {
             return 0;
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Support\Collection
+     */
+    public function search(Request $request)
+    {
+        if($request->ajax())
+        {
+            return DB::table('customers')
+                ->where('name', 'like', '%'.$request->queryText.'%')
+                ->orWhere('address', 'like', '%'.$request->queryText.'%')
+                ->orWhere('city', 'like', '%'.$request->queryText.'%')
+                ->orWhere('country', 'like', '%'.$request->queryText.'%')
+                ->get();
         }
     }
 }
