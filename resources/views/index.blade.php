@@ -243,7 +243,7 @@
                             tr += "<tr data-id='"+data[key].id+"'><td>" + data[key].id + "</td><td>" + data[key].name + "</td><td>" + data[key].address + "</td><td>" + data[key].city + "</td><td>" + data[key].pin_code + "</td><td>" + data[key].country + "</td>" + buttons(data[key].id) + "</tr>";
                         }
                         if(!tr)
-                            tr = "Did not match"
+                            tr = "<tr><td colspan='7' style='text-align: center' class='text-danger'>Did not match</td></tr>";
                         $('#showAllCustomersTable').html(tr);
                     },
                     error: function (response) {
