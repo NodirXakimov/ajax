@@ -23,7 +23,7 @@
                     <th>City <i class="fa fa-sort"></i></th>
                     <th>Pin Code</th>
                     <th>Country <i class="fa fa-sort"></i></th>
-                    <th style="text-align: center; "><a href="#createCustomer" data-toggle="modal" data-target="#createCustomer"><i style="font-size: 25px; color: green" class="fa fa-plus-square"></i></a></th>
+                    <th style="text-align: center; "><a id="createCustomerButton" href="#createCustomer" data-toggle="modal" data-target="#createCustomer"><i style="font-size: 25px; color: green" class="fa fa-plus-square"></i></a></th>
                 </tr>
                 </thead>
                 <tbody id="showAllCustomersTable">
@@ -31,7 +31,7 @@
                 </tbody>
             </table>
             <div class="clearfix">
-                <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                <div class="hint-text">Showing <b>5</b> out of <b>50</b> customers</div>
                 <ul class="pagination">
                     <li class="page-item disabled"><a href="#"><i class="fa fa-angle-double-left"></i></a></li>
                     <li class="page-item active"><a href="#" class="page-link">1</a></li>
@@ -191,8 +191,15 @@
 
 @section('jquery_scripts')
     <script>
+        $(document).keypress(function(e){
+            console.log(e);
+            let which_letter = String.fromCharCode(e.which);
+            if(which_letter == ']')
+                $('#createCustomerButton').click();
+
+        });
         $(document).ready(function(){
-            fetchAllCustomers();
+            fetchCustomers();
             $('#showCustomer').on('hidden.bs.modal', function (){
                 $('#ShowCustomerTableBody').empty();
             });
@@ -253,13 +260,13 @@
             });
 
         });
-        function fetchAllCustomers() {
+        function fetchCustomers() {
             $('#showAllCustomersTable').empty();
             $.ajax({
                 url: "{{ route('customers.index') }}",
                 method: 'GET',
                 success: function (result){
-                    for (let key in result)
+                        for (let key in result)
                     {
                         let tr = "<tr data-id='"+result[key].id+"'><td>" + result[key].id + "</td><td>" + result[key].name + "</td><td>" + result[key].address + "</td><td>" + result[key].city + "</td><td>" + result[key].pin_code + "</td><td>" + result[key].country + "</td>" + buttons(result[key].id) + "</tr>";
                         $('#showAllCustomersTable').append(tr);
@@ -332,8 +339,6 @@
                 dataType: 'json',
                 success: function (result){
                     $('#editCustomer').modal('toggle');
-                    // fetchAllCustomers();
-                    // console.log(result.id);
                     let tr = "tr[data-id="+result.id+"]";
                     $(tr).after(newRow(result.id, result.name, result.address, result.city, result.pin_code, result.country));
                     $(tr).first().remove();
@@ -372,7 +377,6 @@
                     // console.log(result);
                     let tr = "tr[data-id="+result+"]";
                     $(tr).remove();
-                    // fetchAllCustomers();
                 },
                 error: function (error){
                     console.log(error);
