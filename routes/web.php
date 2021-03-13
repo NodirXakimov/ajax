@@ -16,6 +16,14 @@ use App\Http\Controllers\HomeController;
 Route::get('/', function () {
     return view('index');
 });
+
+Route::get('/simpletable', function(){
+    return view('simpletable');
+})->name('simpletable');
+Route::get('/datatable', function (){
+    return view('datatable');
+})->name('datatable');
+
 Route::get('/home', function (){
     return view('welcome');
 });

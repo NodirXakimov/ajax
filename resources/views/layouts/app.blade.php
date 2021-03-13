@@ -138,7 +138,24 @@
     </style>
 </head>
 <body>
-<div class="container-xl">
+<nav class="navbar navbar-expand bg-light fixed-top">
+
+    <!-- Links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('simpletable') }}">Simple Table</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('datatable') }}">DataTable</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="">AJAX DataTable</a>
+        </li>
+    </ul>
+
+</nav>
+
+<div class="container-xl pt-5">
    @yield('content')
     @yield('modal')
 </div>
