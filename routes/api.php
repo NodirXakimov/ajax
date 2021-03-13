@@ -23,4 +23,4 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     Route::apiResource('/customers' ,'CustomerController');
     Route::get('/search', 'CustomerController@search')->name('customers.search');
-
+    Route::get('getCustomers', 'CustomerController@getCustomers')->name('getCustomers');

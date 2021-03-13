@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Contracts\DataTable;
+use Yajra\DataTables\Facades\DataTables;
 
 class CustomerController extends Controller
 {
@@ -89,4 +92,26 @@ class CustomerController extends Controller
                 ->get();
         }
     }
+
+    public function datatable()
+    {
+        $customers = Customer::all();
+        return view('datatable', ['customers' => $customers]);
+    }
+
+    public function ajax()
+    {
+        return view('ajax');
+    }
+
+    public function getCustomers()
+    {
+        $customers = Customer::select('id', 'name', 'address', 'city', 'pin_code', 'country');
+        try {
+            return Datatables::of($customers)->make();
+        } catch (Exception $e) {
+            return response()->json(['errors'=>array($e, $customers->all())], 500);
+        }
+    }
+
 }

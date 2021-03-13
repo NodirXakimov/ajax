@@ -15,18 +15,19 @@ use App\Http\Controllers\HomeController;
 
 Route::get('/', function () {
     return view('index');
-});
+})->name('home');
 
 Route::get('/simpletable', function(){
     return view('simpletable');
 })->name('simpletable');
-Route::get('/datatable', function (){
-    return view('datatable');
-})->name('datatable');
+
+Route::get('/datatable', 'CustomerController@datatable')->name('datatable');
+Route::get('/ajax', 'CustomerController@ajax')->name('ajax');
+
 
 Route::get('/home', function (){
     return view('welcome');
 });
 
 Route::get('/ajax-form', 'HomeController@ajax_form');
-Route::post('/ajax', 'HomeController@ajax');
+Route::post('/ajax1', 'HomeController@ajax');
